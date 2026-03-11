@@ -356,22 +356,6 @@ paths:
                 result: error
                 resultCode: 404
                 message: Candidate not found
-        '404':
-          description: The report template is not defined for the route
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-              result:
-                type: string
-                example: error
-              resultCode:
-                type: integer
-                example: 404
-              message:
-                type: string
-                example: The report template not defined to this route.
         '405':
           description: Invalid request
           content:
