@@ -36,7 +36,7 @@ info:
   termsOfService: https://tilint.com/
   contact:
     email: til.support@tilint.com
-  version: 1.1.1
+  version: 1.1.2
 externalDocs:
   description: Find out more about Til International
   url: https://tilint.com/
@@ -137,12 +137,13 @@ paths:
       summary: Update candidate details
       description: "The details of the candidate can be updated at any time in the\
         \ Til system, for this purpose it is required to provide the unique key received\
-        \ when registering the candidate.<br>\nThe rest of the fields are permission\
+        \ when registering the candidate.<br>\nThe rest of the fields are optional\
         \ fields if needed to update.<br>\nIf the candidate is **before** an examination,\
         \ all the fields can be changed.<br> \nWhen a candidate is doing an examination\
-        \ it is not possible to change the route.<br>\n  For the candidate **after**\
+        \ it is not possible to change the route.<br>\nFor the candidate **after**\
         \ the exam, these values cannot be changed - route, extra time, exam language,\
-        \ homeCandidate. \n  \n"
+        \ homeCandidate, testType.<br>\nThe parameter **testType** cannot be changed\
+        \ when the exam status is **COMPLETED**.\n"
       operationId: updateCandidate
       requestBody:
         content:
@@ -156,6 +157,7 @@ paths:
               gender: 1
               firstName: John
               extraTime: 25
+              testType: 1
       responses:
         '200':
           description: Candidate updated
@@ -196,6 +198,16 @@ paths:
                 result: error
                 resultCode: 406
                 message: Invalid input - ID value is not in the correct format
+        '422':
+          description: testType cannot be changed when the exam status is COMPLETED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                result: error
+                resultCode: 422
+                message: testType cannot be changed when the exam status is COMPLETED
   /getOrganizationRoutes/{organizationID}:
     get:
       tags:
@@ -303,8 +315,7 @@ paths:
           example: 3-1234567
       - name: reportID
         in: path
-        description: The ID of report you would like to receive. 0 - (golmi), 1 -
-          (parshani ragil), 2 - (parshani natsigim), 8 - (doh leminahel)
+        description: The ID of report you would like to receive. 0 - (golmi), 1 - (parshani ragil), 2 - (parshani natsigim), 8 - (doh leminahel)
         required: true
         style: simple
         explode: false
@@ -1129,12 +1140,11 @@ components:
             should be sent to the candidate in order to set a date for the exam.
         testType:
           type: integer
-          description: If the candidate is examined from organization the value that
-            should be sent is 1. If the candidate is examined from home with AI tracking
-            the value that should be sent is 3.
+          description: "Exam type. Allowed values: 1 = בחינה בארגון, 3 = בחינה מהבית + אייג'נט."
           enum:
           - 1
           - 3
+          example: 1
         flexField1Id:
           type: integer
           description: The ID of flexible field slot 1. Available IDs can be obtained
@@ -1244,6 +1254,13 @@ components:
           - 50
           - 75
           - 100
+        testType:
+          type: integer
+          description: "Exam type. Allowed values: 1 = בחינה בארגון, 3 = בחינה מהבית + אייג'נט. This value cannot be changed when the exam status is COMPLETED."
+          enum:
+          - 1
+          - 3
+          example: 1
         invitationDateFrom:
           type: string
           description: date when candidate can start the exam. YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS
@@ -1371,8 +1388,7 @@ components:
             description: Unique identifier for the exam
           testStatus:
             type: string
-            description: Status of the exam, can be (לפני בחינה), (במהלך בחינה), (לאחר
-              בחינה)
+            description: Status of the exam, can be (לפני בחינה), (במהלך בחינה), (לאחר בחינה)
           examExtraTime:
             type: integer
             description: Extra time allowed for the exam in minutes
@@ -1533,8 +1549,7 @@ components:
           description: The flexible field display name.
         flexFieldOptions:
           type: array
-          description: Available options for the flexible field, if applicable. Empty
-            for free-text fields.
+          description: Available options for the flexible field, if applicable. Empty for free-text fields.
           items:
             $ref: '#/components/schemas/FlexFieldOption'
         required:
