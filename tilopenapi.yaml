@@ -356,22 +356,6 @@ paths:
                 result: error
                 resultCode: 404
                 message: Candidate not found
-        '404':
-          description: The report template is not defined for the route
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-              result:
-                type: string
-                example: error
-              resultCode:
-                type: integer
-                example: 404
-              message:
-                type: string
-                example: The report template not defined to this route.
         '405':
           description: Invalid request
           content:
@@ -382,6 +366,16 @@ paths:
                 result: error
                 resultCode: 405
                 message: Invalid request
+        '422':
+          description: The report template is not defined for this route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                result: error
+                resultCode: 422
+                message: The report template not defined to this route
   /getStatus/{candidateNumber}:
     get:
       tags:
