@@ -1,49 +1,70 @@
 openapi: 3.0.0
 info:
   title: Til International Integration API
-  description: |-
-    This is the documentation for integration with third-party systems of Til International customers, for the purpose of sharing data from the Til system with the customer's management system.
-
-    # General:
-    1.  The URL prefix for all end  points is - **https://nlb.srv.tiltests.co.il/api**
-    2.  Access is possible via HTTPS only.
-    3.  All requests must be accessed via HTTP BASIC AUTO with the details provided to you by Til International.
-
-    # API CALLS:
-    **Standard Requests:**
-    1.  ***Register Candidate*** - This is a request to register a new Candidate in the system, this request will open a new candidate in the Til system and return the candidate key, the candidate key that will be provided will be required in order to produce the examinee's results.
-    2. This request must be accompanied by a callback so that we can update you in the stages of the diagnostic process .
-    3.  ***Get Candidate Report*** - This request will return the candidate's results. In order to receive the report, the candidate's key must be provided as was received when opening a new candidate. The results will be received as a base64 string format and the user need to convert it to a PDF file.
-
-    **Utility Requests:**
-    1.  ***Delete Candidate*** - This is a request to delete information about candidates from the Til system, this request must be accompanied by the candidate's key as was received when registering the candidate. Please note, it is possible to delete examinees only before the exam not during.
-    2.  ***Get Organization Routes*** - This request will return all routes associated with the organization and available for examination.
-    3.  ***Get Sub Organizations*** - This request will return all sub organizations associated with the organization.
-    4.  ***Update Candidate Details*** - This request will allow you to update the candidate's details if necessary, such as - first name, ID number, extra time, etc .
-    5.  ***Get Status*** – This request will return the current status of the candidate. Also, after the status is updated, the response to this request will be returned to the Callback provided when registering the candidate in the system. Options - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’.
-    6.  ***Update Status*** – This request allows to insert or remove the candidate from   'PAUSE' status
+  description: "This is the documentation for integration with third-party systems\
+    \ of Til International customers, for the purpose of sharing data from the Til\
+    \ system with the customer's management system.\n\n# General:\n1.  The URL prefix\
+    \ for all end  points is - **https://nlb.srv.tiltests.co.il/api**\n2.  Access\
+    \ is possible via HTTPS only.\n3.  All requests must be accessed via HTTP BASIC\
+    \ AUTO with the details provided to you by Til International.\n\n# API CALLS:\n\
+    **Standard Requests:**\n1.  ***Register Candidate*** - This is a request to register\
+    \ a new Candidate in the system, this request will open a new candidate in the\
+    \ Til system and return the candidate key, the candidate key that will be provided\
+    \ will be required in order to produce the examinee's results.\n2. This request\
+    \ must be accompanied by a callback so that we can update you in the stages of\
+    \ the diagnostic process .\n3.  ***Get Candidate Report*** - This request will\
+    \ return the candidate's results. In order to receive the report, the candidate's\
+    \ key must be provided as was received when opening a new candidate. The results\
+    \ will be received as a base64 string format and the user need to convert it to\
+    \ a PDF file.\n\n**Utility Requests:**\n1.  ***Delete Candidate*** - This is a\
+    \ request to delete information about candidates from the Til system, this request\
+    \ must be accompanied by the candidate's key as was received when registering\
+    \ the candidate. Please note, it is possible to delete examinees only before the\
+    \ exam not during.\n2.  ***Get Organization Routes*** - This request will return\
+    \ all routes associated with the organization and available for examination.\n\
+    3.  ***Get Sub Organizations*** - This request will return all sub organizations\
+    \ associated with the organization.\n4.  ***Update Candidate Details*** - This\
+    \ request will allow you to update the candidate's details if necessary, such\
+    \ as - first name, ID number, extra time, etc .\n5.  ***Get Status*** – This request\
+    \ will return the current status of the candidate. Also, after the status is updated,\
+    \ the response to this request will be returned to the Callback provided when\
+    \ registering the candidate in the system. Options - ‘NOT STARTED’, ‘STARTED’,\
+    \ ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’.\n6.  ***Update Status*** – This request allows\
+    \ to insert or remove the candidate from   'PAUSE' status\n    7.  ***Get Available\
+    \ Flex Fields*** - This request returns the list of available flexible candidate\
+    \ fields defined for the client's organization."
   termsOfService: https://tilint.com/
   contact:
     email: til.support@tilint.com
-  version: 1.1.0
+  version: 1.1.1
 externalDocs:
   description: Find out more about Til International
   url: https://tilint.com/
 servers:
-  - url: https://nlb.srv.tiltests.co.il/api
-    description: provided to you by Til International.
+- url: https://nlb.srv.tiltests.co.il/api
+  description: provided to you by Til International.
 security:
-  - basicAuth: []
+- basicAuth: []
 tags:
-  - name: Standard Requests
-  - name: Utility Requests
+- name: Standard Requests
+- name: Utility Requests
 paths:
   /registerCandidate:
     post:
       tags:
-        - Standard Requests
+      - Standard Requests
       summary: Registerer a new candidate in the Til system
-      description: 'Request to register a new candidate, after sending the request, a  unique key code will be received for the candidate. <br> The candidate key allows for additional actions on the candidate, such as, producing a report and updating details.<br> These are the required fields - first name, last name, gender, ID number, route, sub organization (if applicable).<br> After the status is updated, the response to this request will be returned to the Callback provided when registering the candidate in the system.<br> **Options** - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’. <br> Creation of a new candidate is valid for 30 days from the date of creation, after which the status of the candidate will change to ''EXPIRED'' and a new examination must be opened '
+      description: 'Request to register a new candidate, after sending the request,
+        a  unique key code will be received for the candidate. <br> The candidate
+        key allows for additional actions on the candidate, such as, producing a report
+        and updating details.<br> These are the required fields - first name, last
+        name, gender, ID number, route, sub organization (if applicable).<br> After
+        the status is updated, the response to this request will be returned to the
+        Callback provided when registering the candidate in the system.<br> **Options**
+        - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’. <br> Creation
+        of a new candidate is valid for 30 days from the date of creation, after which
+        the status of the candidate will change to ''EXPIRED'' and a new examination
+        must be opened '
       operationId: registerCandidate
       requestBody:
         content:
@@ -64,6 +85,16 @@ paths:
               callbackUsername: user_name
               callbackPassword: password
               testType: 1
+              flexField1Id: 0
+              flexField1Value: string
+              flexField2Id: 0
+              flexField2Value: string
+              flexField3Id: 0
+              flexField3Value: string
+              flexField4Id: 0
+              flexField4Value: string
+              flexField5Id: 0
+              flexField5Value: string
       responses:
         '200':
           description: Candidate created
@@ -102,15 +133,16 @@ paths:
   /updateCandidateDetails:
     post:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Update candidate details
-      description: |
-        The details of the candidate can be updated at any time in the Til system, for this purpose it is required to provide the unique key received when registering the candidate.<br>
-        The rest of the fields are permission fields if needed to update.<br>
-        If the candidate is **before** an examination, all the fields can be changed.<br> 
-        When a candidate is doing an examination it is not possible to change the route.<br>
-          For the candidate **after** the exam, these values cannot be changed - route, extra time, exam language, homeCandidate. 
-          
+      description: "The details of the candidate can be updated at any time in the\
+        \ Til system, for this purpose it is required to provide the unique key received\
+        \ when registering the candidate.<br>\nThe rest of the fields are permission\
+        \ fields if needed to update.<br>\nIf the candidate is **before** an examination,\
+        \ all the fields can be changed.<br> \nWhen a candidate is doing an examination\
+        \ it is not possible to change the route.<br>\n  For the candidate **after**\
+        \ the exam, these values cannot be changed - route, extra time, exam language,\
+        \ homeCandidate. \n  \n"
       operationId: updateCandidate
       requestBody:
         content:
@@ -167,20 +199,21 @@ paths:
   /getOrganizationRoutes/{organizationID}:
     get:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Returns list of available routes
-      description: The request returns a list of routes associated with the organization, the 'organization id' value will be provided by Til International.
+      description: The request returns a list of routes associated with the organization,
+        the 'organization id' value will be provided by Til International.
       operationId: getRoutes
       parameters:
-        - name: organizationID
-          in: path
-          description: The organization number in 'TIL' system.
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            example: '150'
+      - name: organizationID
+        in: path
+        description: The organization number in 'TIL' system.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: '150'
       responses:
         '200':
           description: Routes successfully produced
@@ -191,31 +224,31 @@ paths:
               example:
                 organizationID: 150
                 routes:
-                  - routeID: 1234
-                    routeName: route 1
-                    reportTypes:
-                      - reportID: 632
-                        reportName: Golmi
-                      - reportID: 633
-                        reportName: Parshani
-                    languages:
-                      - languageName: HEBREW
-                        languageID: 1
-                      - languageName: ARABIC
-                        languageID: 2
-                      - languageName: ENGLISH
-                  - routeID: 12345
-                    routeName: route 2
-                    reportTypes:
-                      - reportID: 632
-                        reportName: Golmi
-                      - reportID: 633
-                        reportName: Parshani
-                    languages:
-                      - languageName: HEBREW
-                        languageID: 1
-                      - languageName: FRENCH
-                        languageID: 6
+                - routeID: 1234
+                  routeName: route 1
+                  reportTypes:
+                  - reportID: 632
+                    reportName: Golmi
+                  - reportID: 633
+                    reportName: Parshani
+                  languages:
+                  - languageName: HEBREW
+                    languageID: 1
+                  - languageName: ARABIC
+                    languageID: 2
+                  - languageName: ENGLISH
+                - routeID: 12345
+                  routeName: route 2
+                  reportTypes:
+                  - reportID: 632
+                    reportName: Golmi
+                  - reportID: 633
+                    reportName: Parshani
+                  languages:
+                  - languageName: HEBREW
+                    languageID: 1
+                  - languageName: FRENCH
+                    languageID: 6
                 result: success
                 resultCode: 200
                 message: Routes successfully produced
@@ -250,31 +283,34 @@ paths:
   /getCandidateReport/{candidateNumber}/{reportID}:
     get:
       tags:
-        - Standard Requests
+      - Standard Requests
       summary: Return candidte report
-      description: |-
-        The request returns a response object containing a pdf report for the candidate.<br> A valid report will only be available once the candidate has completed the test.<br> If the candidate has **not** started the test the pdf report value will be a null value.<br>
-          The different report type IDs can be obtained via getRoutes request.
+      description: "The request returns a response object containing a pdf report\
+        \ for the candidate.<br> A valid report will only be available once the candidate\
+        \ has completed the test.<br> If the candidate has **not** started the test\
+        \ the pdf report value will be a null value.<br>\n  The different report type\
+        \ IDs can be obtained via getRoutes request."
       operationId: getCandidateReport
       parameters:
-        - name: candidateNumber
-          in: path
-          description: The candidate key generated on candidate registration
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            example: 3-1234567
-        - name: reportID
-          in: path
-          description: The ID of report you would like to receive. 0 - (golmi), 1 - (parshani ragil), 2 - (parshani natsigim), 8 - (doh leminahel)
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 3
+      - name: candidateNumber
+        in: path
+        description: The candidate key generated on candidate registration
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 3-1234567
+      - name: reportID
+        in: path
+        description: The ID of report you would like to receive. 0 - (golmi), 1 -
+          (parshani ragil), 2 - (parshani natsigim), 8 - (doh leminahel)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 3
       responses:
         '200':
           description: Report successfully produced
@@ -333,20 +369,23 @@ paths:
   /getStatus/{candidateNumber}:
     get:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Return candidte status
-      description: This request will return the current status of the candidate. Also, after the status is updated, the response to this request will be returned to the Callback provided when registering the candidate in the system. Options - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’.
+      description: This request will return the current status of the candidate. Also,
+        after the status is updated, the response to this request will be returned
+        to the Callback provided when registering the candidate in the system. Options
+        - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’.
       operationId: getStatus
       parameters:
-        - name: candidateNumber
-          in: path
-          description: The candidate key generated on candidate registration
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            example: 3-1234567
+      - name: candidateNumber
+        in: path
+        description: The candidate key generated on candidate registration
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 3-1234567
       responses:
         '200':
           description: Successful request
@@ -392,20 +431,20 @@ paths:
   /getSubOrganizations/{organizationID}:
     get:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Returns a list of existing sub-organizations
       description: This request will return a list of existing sub-organizations.
       operationId: getSubOrganizations
       parameters:
-        - name: organizationID
-          in: path
-          description: The organization number in 'TIL' system.
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 150
+      - name: organizationID
+        in: path
+        description: The organization number in 'TIL' system.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 150
       responses:
         '200':
           description: Successful request
@@ -448,20 +487,21 @@ paths:
   /updateStatus/{candidateNumber}:
     get:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Update candidte status
-      description: This request allows to insert or remove the candidate from PAUSE status
+      description: This request allows to insert or remove the candidate from PAUSE
+        status
       operationId: updateStatus
       parameters:
-        - name: candidateNumber
-          in: path
-          description: The candidate key generated on candidate registration
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            example: 3-1234567
+      - name: candidateNumber
+        in: path
+        description: The candidate key generated on candidate registration
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 3-1234567
       responses:
         '200':
           description: Successful request
@@ -507,18 +547,20 @@ paths:
   /deleteCandidate/{candidateNumber}:
     delete:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Delete purchase order by ID
-      description: This request allows deletion of an examinee from the Til system.  The candidate key must be attached to the request.<br> Please note, deletion is possible for candidates who are before the exam only.
+      description: This request allows deletion of an examinee from the Til system.  The
+        candidate key must be attached to the request.<br> Please note, deletion is
+        possible for candidates who are before the exam only.
       parameters:
-        - name: candidateNumber
-          in: path
-          description: The candidate key generated on candidate registration
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
+      - name: candidateNumber
+        in: path
+        description: The candidate key generated on candidate registration
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
         '200':
           description: Candidate deleted
@@ -573,17 +615,19 @@ paths:
   /GetCandidateData/{candidateNumber}:
     get:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Get candidate data
-      description: The request deletes tests from candidate's route. The test can be deleted only if it is in (לפני בחינה) testStatus. The identifier and testStatus are obtained through /getCandidateData request.
+      description: The request deletes tests from candidate's route. The test can
+        be deleted only if it is in (לפני בחינה) testStatus. The identifier and testStatus
+        are obtained through /getCandidateData request.
       parameters:
-        - name: candidateNumber
-          in: path
-          description: The candidate key generated on candidate registration
-          required: true
-          schema:
-            type: string
-            example: 57-1004768
+      - name: candidateNumber
+        in: path
+        description: The candidate key generated on candidate registration
+        required: true
+        schema:
+          type: string
+          example: 57-1004768
       responses:
         '200':
           description: Candidate data successfully retrieved
@@ -615,13 +659,13 @@ paths:
                 invitationDateFrom: '2024-10-13T10:50:01.7366667'
                 invitationDateUntil: '2024-10-20T10:50:01.7366667'
                 candidateExams:
-                  - examName: סדרות מספריות א
-                    examNumber: '101'
-                    testStatus: לפני בחינה
-                    examExtraTime: 0
-                    examLanguage: Hebrew
-                    testOrder: 1
-                    identifier: '1483738'
+                - examName: סדרות מספריות א
+                  examNumber: '101'
+                  testStatus: לפני בחינה
+                  examExtraTime: 0
+                  examLanguage: Hebrew
+                  testOrder: 1
+                  identifier: '1483738'
                 emails: []
                 flexField1Value: ''
                 flexField2Value: ''
@@ -640,9 +684,11 @@ paths:
   /DeleteTestsFromCandidateRoute:
     post:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Delete an exam from candidate's route
-      description: This request deletes a test from the candidate's route. The identifiers are received through the GetCandidateData function. Please note the deletion is possible only for tests that haven't been started yet
+      description: This request deletes a test from the candidate's route. The identifiers
+        are received through the GetCandidateData function. Please note the deletion
+        is possible only for tests that haven't been started yet
       operationId: deleteTestsFromCandidateRoute
       requestBody:
         content:
@@ -652,7 +698,7 @@ paths:
             example:
               candidateNumber: 57-1004768
               identifiers:
-                - 1483739
+              - 1483739
       responses:
         '200':
           description: Exams deleted successfully
@@ -676,18 +722,20 @@ paths:
   /GetCandidateImage/{candidateNumber}:
     get:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Get candidate image
-      description: 'The request allows to retrieve an URL to the candidate''s image. Candidate''s image exists only when examType is (בחינה מהבית + Agent), examType is obtained through /getCandidateData request. '
+      description: 'The request allows to retrieve an URL to the candidate''s image.
+        Candidate''s image exists only when examType is (בחינה מהבית + Agent), examType
+        is obtained through /getCandidateData request. '
       operationId: getCandidateImage
       parameters:
-        - name: candidateNumber
-          in: path
-          description: The candidate key generated on candidate registration
-          required: true
-          schema:
-            type: string
-            example: 57-1234567
+      - name: candidateNumber
+        in: path
+        description: The candidate key generated on candidate registration
+        required: true
+        schema:
+          type: string
+          example: 57-1234567
       responses:
         '200':
           description: Candidate image link successfully retrieved
@@ -710,25 +758,26 @@ paths:
   /GetAvailableRouteTests/{OrganizationId}/{RouteId}:
     get:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Get available route tests
-      description: The request returns all the tests available at the given route. Requires “organizationId” and “routeId” that can be obtained through /getOrganizationRoutes.
+      description: The request returns all the tests available at the given route.
+        Requires “organizationId” and “routeId” that can be obtained through /getOrganizationRoutes.
       operationId: getAvailableRouteTests
       parameters:
-        - name: OrganizationId
-          in: path
-          description: The organization ID for which available tests need to be fetched
-          required: true
-          schema:
-            type: integer
-            example: 57
-        - name: RouteId
-          in: path
-          description: The route ID for which available tests need to be fetched
-          required: true
-          schema:
-            type: integer
-            example: 236
+      - name: OrganizationId
+        in: path
+        description: The organization ID for which available tests need to be fetched
+        required: true
+        schema:
+          type: integer
+          example: 57
+      - name: RouteId
+        in: path
+        description: The route ID for which available tests need to be fetched
+        required: true
+        schema:
+          type: integer
+          example: 236
       responses:
         '200':
           description: List of available tests for the route
@@ -740,12 +789,12 @@ paths:
                 routeName: 'שירות לקוחות טלפוני מקוצר - ישראכארט '
                 routeId: 236
                 tests:
-                  - name: בעיות כמותיות א'
-                    examNumber: '100'
-                    identifier: exam-1
-                  - name: סדרות מספריות א
-                    examNumber: '101'
-                    identifier: exam-10
+                - name: בעיות כמותיות א'
+                  examNumber: '100'
+                  identifier: exam-1
+                - name: סדרות מספריות א
+                  examNumber: '101'
+                  identifier: exam-10
                 totalCount: 37
                 result: success
                 resultCode: 200
@@ -759,8 +808,12 @@ paths:
   /sendMail:
     post:
       tags:
-        - Utility Requests
-      summary: 'The request allows to send an invitation and reminder email to the candidate. Requires email address in candidate''s details. The parameters for sending are “candidateNumber” and “mailType”. The last parameter is an integer with values: 4 - for invitation mail, 5 for reminder mail. /getCandidateData shows the emails that has been sent in the “emails” value.'
+      - Utility Requests
+      summary: 'The request allows to send an invitation and reminder email to the
+        candidate. Requires email address in candidate''s details. The parameters
+        for sending are “candidateNumber” and “mailType”. The last parameter is an
+        integer with values: 4 - for invitation mail, 5 for reminder mail. /getCandidateData
+        shows the emails that has been sent in the “emails” value.'
       operationId: sendMail
       requestBody:
         content:
@@ -795,9 +848,11 @@ paths:
   /AddCandidateTests:
     post:
       tags:
-        - Utility Requests
+      - Utility Requests
       summary: Add exams to candidate's route
-      description: The request allows to add a test to the candidate's route by sending “candidateNumber” and “identifiers” parameters. “identifiers” can be obtained with /getAvailableRouteTests call.
+      description: The request allows to add a test to the candidate's route by sending
+        “candidateNumber” and “identifiers” parameters. “identifiers” can be obtained
+        with /getAvailableRouteTests call.
       operationId: addCandidateTests
       requestBody:
         content:
@@ -807,8 +862,8 @@ paths:
             example:
               candidateNumber: 57-1004790
               identifiers:
-                - exam-214
-                - inclusiveTest-27
+              - exam-214
+              - inclusiveTest-27
       responses:
         '200':
           description: Exams added successfully
@@ -829,6 +884,50 @@ paths:
           description: Candidate not found
         '405':
           description: Invalid request
+  /GetAvailableFlexFields:
+    get:
+      tags:
+      - Utility Requests
+      summary: Returns list of available flexible fields
+      description: Returns the list of flexible candidate detail fields defined for
+        the client's organization. These field IDs can be used in the registerCandidate
+        request via flexField1Id-flexField5Id together with their matching values.
+      operationId: getAvailableFlexFields
+      responses:
+        '200':
+          description: Flexible fields successfully produced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAvailableFlexFieldsResponse'
+              example:
+                flexFields:
+                - id: 17
+                  displayName: birth date
+                  flexFieldOptions: []
+                  required: true
+                totalCount: 1
+                result: success
+                resultCode: 200
+                message: null
+        '401':
+          description: Authentication information is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        '405':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                result: error
+                resultCode: 405
+                message: Invalid request
 components:
   schemas:
     Routs:
@@ -836,7 +935,8 @@ components:
       properties:
         organizationID:
           type: integer
-          description: The organization id that supply from Til International while receiving API access information
+          description: The organization id that supply from Til International while
+            receiving API access information
           format: integer
           example: 3
         routes:
@@ -861,7 +961,8 @@ components:
           example: 3-365863
         testExpirationDate:
           type: string
-          description: An ISO 8601 formatted timestamp of expiration date for answering the test.
+          description: An ISO 8601 formatted timestamp of expiration date for answering
+            the test.
           example: 27/02/2021
         url:
           type: string
@@ -889,10 +990,12 @@ components:
           example: 3-365863
         timestampStart:
           type: string
-          description: an ISO 8601 formatted timestamp of when the candidate started the test
+          description: an ISO 8601 formatted timestamp of when the candidate started
+            the test
         status:
           type: string
-          description: Status in which the candidate is – Options - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’
+          description: Status in which the candidate is – Options - ‘NOT STARTED’,
+            ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’
     ApiResponse:
       type: object
       properties:
@@ -901,8 +1004,8 @@ components:
           description: “success” or “error”.
           example: success
           enum:
-            - success
-            - error
+          - success
+          - error
         result_code:
           type: integer
           description: Numeric code for support purposes.
@@ -917,36 +1020,42 @@ components:
           description: The candidate key generated on candidate registration
         startTimestamp:
           type: string
-          description: an ISO 8601 formatted timestamp of when the candidate started the test
+          description: an ISO 8601 formatted timestamp of when the candidate started
+            the test
         pdfReport:
           type: string
           description: A pdf report containing the candidate's result
           format: base64
         status:
           type: string
-          description: Status in which the candidate is – Options - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’
+          description: Status in which the candidate is – Options - ‘NOT STARTED’,
+            ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’
     registerCandidate_body:
       required:
-        - callbackPassword
-        - callbackUrl
-        - callbackUsername
-        - firstName
-        - gender
-        - idNumber
-        - language
-        - lastName
-        - routeID
+      - callbackPassword
+      - callbackUrl
+      - callbackUsername
+      - firstName
+      - gender
+      - idNumber
+      - language
+      - lastName
+      - routeID
       type: object
       properties:
         organization:
           type: integer
-          description: The organization number in the 'TIL' system. This is a required field if the user has permission to more than one organization.
+          description: The organization number in the 'TIL' system. This is a required
+            field if the user has permission to more than one organization.
         subOrganization:
           type: integer
-          description: The list of sub-organizations can be obtained from 'getSubOrganizations' request
+          description: The list of sub-organizations can be obtained from 'getSubOrganizations'
+            request
         routeID:
           type: string
-          description: static key provided by Til International to accompany each request – You can get all the keys belonging to the organization through getOrganizationRoutes API request
+          description: static key provided by Til International to accompany each
+            request – You can get all the keys belonging to the organization through
+            getOrganizationRoutes API request
           format: string
         idNumber:
           type: string
@@ -955,8 +1064,8 @@ components:
           type: integer
           description: candidate gender – “1” for male or “2” for female
           enum:
-            - 1
-            - 2
+          - 1
+          - 2
         firstName:
           type: string
           description: candidate first name
@@ -965,17 +1074,19 @@ components:
           description: candidate last name
         language:
           type: integer
-          description: candidate test language - 1 for Hebrew, 2 for English, 3 for Arabic, 4 for French, 5 for Russian, 6 for Spanish
+          description: candidate test language - 1 for Hebrew, 2 for English, 3 for
+            Arabic, 4 for French, 5 for Russian, 6 for Spanish
           enum:
-            - 1
-            - 2
-            - 3
-            - 4
-            - 5
-            - 6
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
         email:
           type: string
-          description: candidate email address – REQUIRED for routes with mail option like AI tracking routes
+          description: candidate email address – REQUIRED for routes with mail option
+            like AI tracking routes
         phone:
           type: string
           description: candidate phone number
@@ -983,15 +1094,17 @@ components:
           type: integer
           description: The extra time required for the candidate
           enum:
-            - 0
-            - 20
-            - 25
-            - 50
-            - 75
-            - 100
+          - 0
+          - 20
+          - 25
+          - 50
+          - 75
+          - 100
         callbackUrl:
           type: string
-          description: HTTP URL to which candidate status are POSTed on test started or completion. JSON data will be POSTed to this url in the same format as the “getStatus” from this API
+          description: HTTP URL to which candidate status are POSTed on test started
+            or completion. JSON data will be POSTed to this url in the same format
+            as the “getStatus” from this API
         callbackUsername:
           type: string
           description: HTTP Basic Auto username for callback
@@ -1000,13 +1113,53 @@ components:
           description: HTTP Basic Auto password for callback
         homeCandidate:
           type: boolean
-          description: If the candidate is examined from home Should be sent 'TRUE' value. the default value is 'FALSE'. If the candidate is set for examination from home you will receive a link to register for the exam. This link should be sent to the candidate in order to set a date for the exam.
+          description: If the candidate is examined from home Should be sent 'TRUE'
+            value. the default value is 'FALSE'. If the candidate is set for examination
+            from home you will receive a link to register for the exam. This link
+            should be sent to the candidate in order to set a date for the exam.
         testType:
           type: integer
-          description: If the candidate is examined from organization the value that should be sent is 1. If the candidate is examined from home with AI tracking the value that should be sent is 3.
+          description: If the candidate is examined from organization the value that
+            should be sent is 1. If the candidate is examined from home with AI tracking
+            the value that should be sent is 3.
           enum:
-            - 1
-            - 3
+          - 1
+          - 3
+        flexField1Id:
+          type: integer
+          description: The ID of flexible field slot 1. Available IDs can be obtained
+            from the GetAvailableFlexFields request.
+        flexField1Value:
+          type: string
+          description: The value to assign to flexible field slot 1.
+        flexField2Id:
+          type: integer
+          description: The ID of flexible field slot 2. Available IDs can be obtained
+            from the GetAvailableFlexFields request.
+        flexField2Value:
+          type: string
+          description: The value to assign to flexible field slot 2.
+        flexField3Id:
+          type: integer
+          description: The ID of flexible field slot 3. Available IDs can be obtained
+            from the GetAvailableFlexFields request.
+        flexField3Value:
+          type: string
+          description: The value to assign to flexible field slot 3.
+        flexField4Id:
+          type: integer
+          description: The ID of flexible field slot 4. Available IDs can be obtained
+            from the GetAvailableFlexFields request.
+        flexField4Value:
+          type: string
+          description: The value to assign to flexible field slot 4.
+        flexField5Id:
+          type: integer
+          description: The ID of flexible field slot 5. Available IDs can be obtained
+            from the GetAvailableFlexFields request.
+        flexField5Value:
+          type: string
+          description: The value to assign to flexible field slot 5.
     inline_response_200:
       example:
         candidateNumber: 3-365863
@@ -1017,11 +1170,11 @@ components:
         resultCode: 200
         message: Candidate created
       allOf:
-        - $ref: '#/components/schemas/Register'
-        - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/Register'
+      - $ref: '#/components/schemas/ApiResponse'
     updateCandidateDetails_body:
       required:
-        - candidateNumber
+      - candidateNumber
       type: object
       properties:
         candidateNumber:
@@ -1029,10 +1182,13 @@ components:
           description: The candidate key generated on candidate registration
         subOrganization:
           type: integer
-          description: The list of sub-organizations can be obtained from 'getSubOrganizations' request
+          description: The list of sub-organizations can be obtained from 'getSubOrganizations'
+            request
         routeID:
           type: string
-          description: static key provided by Til International to accompany each request – You can get all the keys belonging to the organization through Get organization routes API request
+          description: static key provided by Til International to accompany each
+            request – You can get all the keys belonging to the organization through
+            Get organization routes API request
           format: string
         idNumber:
           type: string
@@ -1041,8 +1197,8 @@ components:
           type: integer
           description: candidate gender – “1” for male or “2” for female
           enum:
-            - 1
-            - 2
+          - 1
+          - 2
         firstName:
           type: string
           description: candidate first name
@@ -1053,12 +1209,12 @@ components:
           type: string
           description: candidate test language
           enum:
-            - HEBREW
-            - ARABIC
-            - ENGLISH
-            - RUSSIAN
-            - SPANISH
-            - FRENCH
+          - HEBREW
+          - ARABIC
+          - ENGLISH
+          - RUSSIAN
+          - SPANISH
+          - FRENCH
         email:
           type: string
           description: candidate email address
@@ -1072,18 +1228,20 @@ components:
           type: integer
           description: The extra time required for the candidate
           enum:
-            - 0
-            - 20
-            - 25
-            - 50
-            - 75
-            - 100
+          - 0
+          - 20
+          - 25
+          - 50
+          - 75
+          - 100
         invitationDateFrom:
           type: string
-          description: date when candidate can start the exam. YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS both formats are accepted
+          description: date when candidate can start the exam. YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS
+            both formats are accepted
         invitationDateUntil:
           type: string
-          description: date till when candidate can do the exam. YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS both formats are accepted
+          description: date till when candidate can do the exam. YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS
+            both formats are accepted
     GetCandidateData:
       type: object
       properties:
@@ -1203,7 +1361,8 @@ components:
             description: Unique identifier for the exam
           testStatus:
             type: string
-            description: Status of the exam, can be (לפני בחינה), (במהלך בחינה), (לאחר בחינה)
+            description: Status of the exam, can be (לפני בחינה), (במהלך בחינה), (לאחר
+              בחינה)
           examExtraTime:
             type: integer
             description: Extra time allowed for the exam in minutes
@@ -1266,11 +1425,11 @@ components:
           type: integer
           description: Type of mail to be sent (4 for invitation, 5 for reminder)
           enum:
-            - 4
-            - 5
+          - 4
+          - 5
       required:
-        - candidateNumber
-        - mailType
+      - candidateNumber
+      - mailType
     addCandidateTests_body:
       type: object
       properties:
@@ -1284,27 +1443,27 @@ components:
           description: List of exam identifiers to add to the candidate's route
     inline_response_200_1:
       allOf:
-        - $ref: '#/components/schemas/Update'
-        - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/Update'
+      - $ref: '#/components/schemas/ApiResponse'
     inline_response_200_2:
       allOf:
-        - $ref: '#/components/schemas/Routs'
-        - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/Routs'
+      - $ref: '#/components/schemas/ApiResponse'
     inline_response_200_3:
       allOf:
-        - $ref: '#/components/schemas/GetReport'
-        - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/GetReport'
+      - $ref: '#/components/schemas/ApiResponse'
     inline_response_200_4:
       allOf:
-        - $ref: '#/components/schemas/GetStatus'
-        - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/GetStatus'
+      - $ref: '#/components/schemas/ApiResponse'
     inline_response_200_5:
       allOf:
-        - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/ApiResponse'
     inline_response_200_6:
       allOf:
-        - $ref: '#/components/schemas/Delete'
-        - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/Delete'
+      - $ref: '#/components/schemas/ApiResponse'
     Routs_reportTypes:
       type: object
       properties:
@@ -1344,6 +1503,47 @@ components:
           type: integer
         typeName:
           type: string
+    FlexFieldOption:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The option identifier.
+        displayName:
+          type: string
+          description: The option display name.
+    FlexField:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The flexible field identifier to be used in registerCandidate.
+        displayName:
+          type: string
+          description: The flexible field display name.
+        flexFieldOptions:
+          type: array
+          description: Available options for the flexible field, if applicable. Empty
+            for free-text fields.
+          items:
+            $ref: '#/components/schemas/FlexFieldOption'
+        required:
+          type: boolean
+          description: Indicates whether the field is required.
+    GetAvailableFlexFields:
+      type: object
+      properties:
+        flexFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlexField'
+        totalCount:
+          type: integer
+          description: Total number of available flexible fields.
+    GetAvailableFlexFieldsResponse:
+      allOf:
+      - $ref: '#/components/schemas/GetAvailableFlexFields'
+      - $ref: '#/components/schemas/ApiResponse'
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
