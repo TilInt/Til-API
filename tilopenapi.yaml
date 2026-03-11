@@ -366,6 +366,16 @@ paths:
                 result: error
                 resultCode: 405
                 message: Invalid request
+        '422':
+          description: The report template is not defined for this route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                result: error
+                resultCode: 422
+                message: The report template not defined to this route
   /getStatus/{candidateNumber}:
     get:
       tags:
