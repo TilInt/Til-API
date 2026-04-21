@@ -36,7 +36,7 @@ info:
   termsOfService: https://tilint.com/
   contact:
     email: til.support@tilint.com
-  version: 1.1.3
+  version: 1.1.4
 externalDocs:
   description: Find out more about Til International
   url: https://tilint.com/
@@ -292,6 +292,78 @@ paths:
                 result: error
                 resultCode: 405
                 message: Invalid request
+  /getAvailableReportsByRoute/{routeNumber}:
+  get:
+    tags:
+      - Reports
+    summary: Get available reports by route
+    description: |
+      Returns the list of available report types for the given route.
+    parameters:
+      - in: path
+        name: routeNumber
+        required: true
+        schema:
+          type: integer
+          example: 12
+        description: The route number for which to retrieve the available reports.
+    responses:
+      '200':
+        description: List of available reports for the route
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                routeNumber:
+                  type: integer
+                  example: 12
+                reports:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reportId:
+                        type: integer
+                        example: 1
+                      reportName:
+                        type: string
+                        example: פרשני
+            examples:
+              success:
+                value:
+                  routeNumber: 12
+                  reports:
+                    - reportId: 0
+                      reportName: גולמי
+                    - reportId: 1
+                      reportName: פרשני
+                    - reportId: 2
+                      reportName: דוח פרשני מקוצר
+                    - reportId: 8
+                      reportName: דוח פרשני מותאם
+                    - reportId: 9
+                      reportName: דוח נציגים מקוצר
+      '400':
+        description: Invalid route number supplied
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Invalid route number
+      '404':
+        description: Route not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Route not found
   /getCandidateReport/{candidateNumber}/{reportID}:
     get:
       tags:
@@ -315,7 +387,12 @@ paths:
           example: 3-1234567
       - name: reportID
         in: path
-        description: The ID of report you would like to receive. 0 - (golmi), 1 - (parshani ragil), 2 - (parshani natsigim), 8 - (doh leminahel)
+        description: The ID of report you would like to receive. 
+          0 - (גולמי), 
+          1 - (פרשני), 
+          2 - (דוח פרשני מקוצר), 
+          8 - (דוח פרשני מותאם), 
+          9 - (דוח נציגים מקוצר)
         required: true
         style: simple
         explode: false
