@@ -36,7 +36,7 @@ info:
   termsOfService: https://tilint.com/
   contact:
     email: til.support@tilint.com
-  version: 1.1.4
+  version: 1.1.5
 externalDocs:
   description: Find out more about Til International
   url: https://tilint.com/
@@ -64,7 +64,8 @@ paths:
         - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’. <br> Creation
         of a new candidate is valid for 30 days from the date of creation, after which
         the status of the candidate will change to ''EXPIRED'' and a new examination
-        must be opened '
+        must be opened. Use of forceCreate set to false is very recommended to prevent 
+        creation of duplicate candidates'
       operationId: registerCandidate
       requestBody:
         content:
@@ -95,6 +96,7 @@ paths:
               flexField4Value: string
               flexField5Id: 0
               flexField5Value: string
+              forceCreate: false
       responses:
         '200':
           description: Candidate created
@@ -130,6 +132,16 @@ paths:
                 result: error
                 resultCode: 406
                 message: Invalid input - ID value is not in the correct format
+        '500':
+          description: Duplicate candidate was not created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                result: error
+                resultCode: -2
+                message: המערכת זיהתה כי נבחן זה נמצא במערכת לפני בחינה ולא ניתן לפתוח רות סיום לבחינה נוספת
   /updateCandidateDetails:
     post:
       tags:
@@ -464,6 +476,77 @@ paths:
                 result: error
                 resultCode: 422
                 message: The report template not defined to this route
+    /GetAvailableCsvTemplates:
+      get:
+        tags:
+        - Utility Requests
+        summary: Returns available CSV templates
+        description: Returns the list of CSV templates available for the authenticated organization.
+        operationId: getAvailableCsvTemplates
+        responses:
+          '200':
+            description: CSV templates successfully retrieved
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/GetAvailableCsvTemplatesResponse'
+                example:
+                  items:
+                    - id: 80
+                      value: 80
+                      description: תוכנית קודקוד
+                    - id: 140
+                      value: 140
+                      description: דוח סוף חודש
+                  totalCount: 2
+                  result: success
+                  resultCode: 200
+                  message: null
+          '401':
+            description: Authentication information is missing or invalid
+          '405':
+            description: Invalid request
+    /GenerateCsvReport:
+      get:
+        tags:
+        - Utility Requests
+        summary: Generate CSV report
+        description: Generates a CSV report for a candidate according to the selected CSV template.
+        operationId: generateCsvReport
+  
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateCsvReportRequest'
+              example:
+                candidateNumber: 3-1234567
+                organizationCsvTemplateId: 999
+  
+        responses:
+          '200':
+            description: CSV report generated successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/GenerateCsvReportResponse'
+                example:
+                  isSucceeded: true
+                  csvContent: "מספר שורה,שם פרטי,שם משפחה..."
+                  reportName: TABLCst_15696_5-31-2026.csv
+                  result: success
+                  resultCode: 200
+                  message: null
+  
+          '401':
+            description: Authentication information is missing or invalid
+  
+          '404':
+            description: Candidate or template not found
+  
+          '405':
+            description: Invalid request
   /getStatus/{candidateNumber}:
     get:
       tags:
@@ -1257,6 +1340,12 @@ components:
         flexField5Value:
           type: string
           description: The value to assign to flexible field slot 5.
+        forceCreate:
+          type: boolean
+          description: Determines whether to force candidate creation when a duplicate candidate already exists.
+            If set to false and the candidate already exists in the organization/route, the request will fail.
+            If set to true, the system will create the candidate even when a duplicate exists, according to the organizations permissions and duplicate-candidate rules.
+          example: false
     inline_response_200:
       example:
         candidateNumber: 3-365863
@@ -1606,6 +1695,62 @@ components:
           type: integer
         typeName:
           type: string
+    CsvTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 80
+        value:
+          type: integer
+          example: 80
+        description:
+          type: string
+          example: תוכנית קודקוד
+    GetAvailableCsvTemplates:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CsvTemplate'
+        totalCount:
+          type: integer
+          example: 2
+    GetAvailableCsvTemplatesResponse:
+      allOf:
+        - $ref: '#/components/schemas/GetAvailableCsvTemplates'
+        - $ref: '#/components/schemas/ApiResponse'
+    GenerateCsvReportRequest:
+      type: object
+      required:
+        - candidateNumber
+        - organizationCsvTemplateId
+      properties:
+        candidateNumber:
+          type: string
+          description: Candidate identifier.
+          example: 214-1004173
+        organizationCsvTemplateId:
+          type: integer
+          description: CSV template identifier returned from GetAvailableCsvTemplates.
+          example: 80
+    GenerateCsvReport:
+      type: object
+      properties:
+        isSucceeded:
+          type: boolean
+          example: true
+        csvContent:
+          type: string
+          description: CSV file content.
+        reportName:
+          type: string
+          example: TABLCst_15696_5-31-2026.csv
+    GenerateCsvReportResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenerateCsvReport'
+        - $ref: '#/components/schemas/ApiResponse'
     FlexFieldOption:
       type: object
       properties:
