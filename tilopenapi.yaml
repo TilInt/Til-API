@@ -64,7 +64,8 @@ paths:
         - ‘NOT STARTED’, ‘STARTED’, ‘COMPLETED’, ‘PAUSE’, ‘EXPIRED’. <br> Creation
         of a new candidate is valid for 30 days from the date of creation, after which
         the status of the candidate will change to ''EXPIRED'' and a new examination
-        must be opened '
+        must be opened. Use of forceCreate set to false is very recommended to prevent 
+        creation of duplicate candidates'
       operationId: registerCandidate
       requestBody:
         content:
@@ -95,6 +96,7 @@ paths:
               flexField4Value: string
               flexField5Id: 0
               flexField5Value: string
+              forceCreate: false
       responses:
         '200':
           description: Candidate created
@@ -130,6 +132,16 @@ paths:
                 result: error
                 resultCode: 406
                 message: Invalid input - ID value is not in the correct format
+        '500':
+          description: Duplicate candidate was not created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                result: error
+                resultCode: -2
+                message: המערכת זיהתה כי נבחן זה נמצא במערכת לפני בחינה ולא ניתן לפתוח רות סיום לבחינה נוספת
   /updateCandidateDetails:
     post:
       tags:
@@ -1328,6 +1340,12 @@ components:
         flexField5Value:
           type: string
           description: The value to assign to flexible field slot 5.
+        forceCreate:
+          type: boolean
+          description: Determines whether to force candidate creation when a duplicate candidate already exists.
+            If set to false and the candidate already exists in the organization/route, the request will fail.
+            If set to true, the system will create the candidate even when a duplicate exists, according to the organizations permissions and duplicate-candidate rules.
+          example: false
     inline_response_200:
       example:
         candidateNumber: 3-365863
